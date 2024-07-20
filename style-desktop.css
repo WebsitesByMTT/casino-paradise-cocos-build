@@ -114,6 +114,12 @@ body {
       border-radius: 6px;
       box-shadow: 0 5px 40px #333
   }
+div > div {
+    /* Styles for the child div */
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+}
   iframe{
    width: 100vw !important;
    height: 100vh !important;
