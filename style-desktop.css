@@ -27,6 +27,8 @@ body {
   }
   
   #Cocos2dGameContainer {
+    width: 100vw !important;
+    height: 100vh !important;
     position: absolute;
     margin: 0;
     overflow: hidden;
