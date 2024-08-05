@@ -10,18 +10,24 @@ window.boot = function () {
         // Loading splash scene
         var splash = document.getElementById('splash');
         var progressBar = splash.querySelector('.progress-bar span');
+        var coin = document.querySelector('.coin');
         onProgress = function (finish, total) {
             var percent = 100 * finish / total;
             if (progressBar) {
-                progressBar.style.width = percent.toFixed(2) + '%';
+                // progressBar.style.width = percent.toFixed(2) + '%';
             }
+            progressBar.style.width = percent.toFixed(2) + '%';
+            coin.style.left = percent.toFixed(2) - 2 + '%';
+            // console.log("percentage", percent);
         };
         splash.style.display = 'block';
         progressBar.style.width = '0%';
-
         cc.director.once(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
-            splash.style.display = 'none';
+            setTimeout(() => {  
+                splash.style.display = 'none';
+            }, 2000);
         });
+       
     }
 
     var onStart = function () {
@@ -145,11 +151,38 @@ if (window.jsb) {
 
 function onResize() {
     console.log("check this function");
-    var defaultHeight, defaultWidth;
-    defaultWidth = 1080;
-    defaultHeight = 608;
-    var width = window.outerWidth;
-    var height = window.outerHeight;
+    var defaultWidth = 1920;
+    var defaultHeight = 1080;
+    var aspectRatio = defaultWidth / defaultHeight;
+
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    var windowAspectRatio = windowWidth / windowHeight;
+
+    var newCanvasWidth, newCanvasHeight;
+
+    if (windowAspectRatio > aspectRatio) {
+        // Window is wider than our aspect ratio, so we fit to height
+        newCanvasHeight = windowHeight;
+        newCanvasWidth = newCanvasHeight * aspectRatio;
+    } else {
+        // Window is taller than our aspect ratio, so we fit to width
+        newCanvasWidth = windowWidth;
+        newCanvasHeight = newCanvasWidth / aspectRatio;
+    }
+
+    var canvas = document.getElementById('GameCanvas');
+    canvas.width = newCanvasWidth;
+    canvas.height = newCanvasHeight;
+
+    // Optionally, center the canvas
+    // canvas.style.position = 'absolute';
+    // canvas.style.left = (windowWidth - newCanvasWidth) / 2 + 'px';
+    // canvas.style.top = (windowHeight - newCanvasHeight) / 2 + 'px';
     // // console.log("RESIZE IS 9", width, height, width/height);
-    resizeWin(defaultWidth, defaultHeight);
+    // resizeWin(defaultWidth, defaultHeight);
 }
+document.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('resize', onResize);
+    onResize(); // Call it initially to set the correct size.
+});
